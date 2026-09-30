@@ -7,18 +7,30 @@ window.SITE = {
 
 document.addEventListener('DOMContentLoaded', function () {
 
-  // mobile nav toggle
-  var burger = document.querySelector('.burger'),
-      links = document.querySelector('.navlinks');
+  // ==============================
+  // MOBILE NAV TOGGLE
+  // ==============================
+
+  var burger = document.querySelector('.burger');
+  var links = document.querySelector('.navlinks');
 
   if (burger && links) {
+
     burger.addEventListener('click', function () {
+
       var open = links.classList.toggle('open');
+
       burger.setAttribute('aria-expanded', open);
+
     });
+
   }
 
-  // scroll reveal
+
+  // ==============================
+  // SCROLL REVEAL
+  // ==============================
+
   var els = document.querySelectorAll('.reveal');
 
   if (
@@ -31,8 +43,11 @@ document.addEventListener('DOMContentLoaded', function () {
       entries.forEach(function (e) {
 
         if (e.isIntersecting) {
+
           e.target.classList.add('in');
+
           io.unobserve(e.target);
+
         }
 
       });
@@ -41,20 +56,28 @@ document.addEventListener('DOMContentLoaded', function () {
       threshold: 0.2
     });
 
+
     els.forEach(function (e) {
+
       io.observe(e);
+
     });
 
   } else {
 
     els.forEach(function (e) {
+
       e.classList.add('in');
+
     });
 
   }
 
 
-  // whatsapp / call links
+  // ==============================
+  // WHATSAPP LINKS
+  // ==============================
+
   document.querySelectorAll('[data-wa]').forEach(function (a) {
 
     a.href =
@@ -66,106 +89,183 @@ document.addEventListener('DOMContentLoaded', function () {
       );
 
     a.target = '_blank';
+
     a.rel = 'noopener';
 
   });
 
 
+  // ==============================
+  // CALL LINKS
+  // ==============================
+
   document.querySelectorAll('[data-call]').forEach(function (a) {
+
     a.href = 'tel:' + window.SITE.PHONE;
+
   });
 
 
-  // contact form
+  // ==============================
+  // CONTACT FORM
+  // ==============================
+
   var f = document.getElementById('f');
 
   if (f) {
 
-    var m = document.getElementById('msg'),
-        sb = f.querySelector('button[type=submit]');
+    var m = document.getElementById('msg');
+
+    var sb = f.querySelector('button[type=submit]');
 
 
     function say(t, ok) {
 
       m.style.color = ok ? '#146356' : '#B42318';
+
       m.textContent = t;
 
     }
 
 
-    // prefill goal from a "?goal=" query param
+    // ==============================
+    // PREFILL GOAL FROM URL
+    // ==============================
+
     var qp = new URLSearchParams(location.search);
 
     if (qp.get('goal') && f.goal) {
+
       f.goal.value = qp.get('goal');
+
     }
 
+
+    // ==============================
+    // FORM SUBMIT
+    // ==============================
 
     f.addEventListener('submit', function (e) {
 
       e.preventDefault();
 
 
-      // honeypot
-      if (f.company.value) return;
+      // ==============================
+      // HONEYPOT CHECK
+      // ==============================
 
+      // Real users never see/fill this field.
+      // Bots that fill it are rejected.
 
-      // browser validation
-      if (!f.checkValidity()) {
-        f.reportValidity();
+      if (f.company && f.company.value.trim() !== '') {
+
         return;
+
       }
 
 
+      // ==============================
+      // BROWSER VALIDATION
+      // ==============================
+
+      if (!f.checkValidity()) {
+
+        f.reportValidity();
+
+        return;
+
+      }
+
+
+      // ==============================
+      // GET FORM VALUES
+      // ==============================
+
       var name = f.n.value.trim();
+
 
       var ph = f.p.value
         .replace(/[\s\-()]/g, '')
         .replace(/^(\+91|91|0)(?=\d{10}$)/, '');
 
+
       var email = f.e.value.trim();
 
 
+      // ==============================
+      // VALIDATION
+      // ==============================
+
       if (name.length < 2) {
+
         say('Please enter your full name.');
+
         return;
+
       }
 
 
       if (!/^[6-9]\d{9}$/.test(ph)) {
+
         say('Please enter a valid 10-digit mobile number.');
+
         return;
+
       }
 
 
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+
         say('Please enter a valid email address.');
+
         return;
+
       }
 
+
+      // ==============================
+      // CONSENT
+      // ==============================
 
       if (!f.consent.checked) {
+
         say('Please tick the consent box so we can contact you.');
+
         return;
+
       }
 
 
-      if (window.SITE.SHEET_URL.indexOf('PASTE') === 0) {
+      // ==============================
+      // CHECK APPS SCRIPT CONNECTION
+      // ==============================
+
+      if (
+        !window.SITE.SHEET_URL ||
+        window.SITE.SHEET_URL.indexOf('https://script.google.com/') !== 0
+      ) {
+
         say('The form is not connected yet. Please add the Google Sheets URL.');
+
         return;
+
       }
 
+
+      // ==============================
+      // BUTTON STATE
+      // ==============================
 
       sb.disabled = true;
+
       sb.textContent = 'Sending...';
+
       say('');
 
 
-      /*
-       * IMPORTANT:
-       * Keep using URLSearchParams / e.parameter.
-       * We are simply adding consent to the POST data.
-       */
+      // ==============================
+      // PREPARE FORM DATA
+      // ==============================
 
       var d = new URLSearchParams({
 
@@ -181,13 +281,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
         goal: f.goal.value,
 
-        // THIS IS THE NEW PART
+        // Consent is explicitly sent
         consent: f.consent.checked ? 'Yes' : 'No',
+
+        // Honeypot is also sent to Apps Script
+        company: f.company ? f.company.value : '',
 
         page: location.href
 
       });
 
+
+      // ==============================
+      // SEND TO GOOGLE APPS SCRIPT
+      // ==============================
 
       fetch(window.SITE.SHEET_URL, {
 
@@ -199,7 +306,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
       })
 
+
       .then(function () {
+
+        // ==============================
+        // SUCCESS
+        // ==============================
 
         f.reset();
 
@@ -210,7 +322,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
       })
 
+
       .catch(function () {
+
+        // ==============================
+        // ERROR
+        // ==============================
 
         say(
           'Sorry, something went wrong. Please try again or reach us on WhatsApp.'
@@ -218,9 +335,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
       })
 
+
       .finally(function () {
 
         sb.disabled = false;
+
         sb.textContent = 'Request a call';
 
       });
