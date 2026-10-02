@@ -51,7 +51,8 @@ nav{flex-wrap:nowrap}
  .navlinks.open{display:flex;flex-direction:column;align-items:stretch;position:absolute;top:78px;left:0;right:0;background:var(--bg);padding:18px 28px 26px;border-bottom:1px solid var(--line);gap:16px;box-shadow:0 16px 30px rgba(11,42,74,.12);z-index:10}
  .navlinks .navcta .btn{display:block;text-align:center}
 }
-@media (max-width:420px){.logo-text{display:none}nav{height:70px}.logo img{height:32px}}
+@media (max-width:420px){nav{height:70px}.logo img{height:30px}.logo-text{font-size:16px}}
+@media (max-width:360px){.logo-text{font-size:14.5px}}
 
 /* hero band (interior pages) */
 .pagehero{background:linear-gradient(160deg,var(--navy-d),var(--navy) 60%,var(--green));color:#fff;padding:74px 0 90px}
