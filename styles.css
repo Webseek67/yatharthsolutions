@@ -6,25 +6,13 @@
  --card:#FFFFFF;--head:'Cormorant Garamond',Georgia,serif;--body:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
 }
 
-:root{
- box-sizing:border-box;
- padding-top:env(safe-area-inset-top,0px);
- padding-bottom:env(safe-area-inset-bottom,0px)
-}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 
-html{
- scroll-padding-top:96px;
- scroll-behavior:smooth
-}
+html{scroll-padding-top:96px;scroll-behavior:smooth}
 
-*,*::before,*::after{
- box-sizing:inherit
-}
+*,*::before,*::after{box-sizing:inherit}
 
-html,body{
- overflow-x:hidden;
- max-width:100%
-}
+html,body{overflow-x:hidden;max-width:100%}
 
 body{
  margin:0;
@@ -34,6 +22,7 @@ body{
 }
 
 a{color:inherit}
+
 img{max-width:100%}
 
 .wrap{
@@ -50,11 +39,7 @@ h1,h2,h3{
  letter-spacing:.002em
 }
 
-a:focus-visible,
-button:focus-visible,
-input:focus-visible,
-select:focus-visible,
-summary:focus-visible{
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{
  outline:3px solid var(--gold);
  outline-offset:3px
 }
@@ -93,9 +78,7 @@ summary:focus-visible{
  color:var(--mute)
 }
 
-section{
- padding:88px 0
-}
+section{padding:88px 0}
 
 .alt{
  background:var(--bg2);
@@ -171,8 +154,7 @@ nav{
  justify-content:space-between;
  align-items:center;
  height:78px;
- gap:20px;
- flex-wrap:nowrap
+ gap:20px
 }
 
 .logo{
@@ -183,21 +165,13 @@ nav{
  font-family:var(--head);
  font-weight:700;
  font-size:19px;
- color:var(--navy);
- flex:0 1 auto;
- min-width:0
+ color:var(--navy)
 }
 
 .logo img{
  height:38px;
  width:auto;
  display:block
-}
-
-.logo-text{
- white-space:nowrap;
- overflow:hidden;
- text-overflow:ellipsis
 }
 
 .navlinks{
@@ -221,9 +195,7 @@ nav{
  color:var(--navy)
 }
 
-.navcta{
- display:none
-}
+.navcta{display:none}
 
 .burger{
  display:none;
@@ -236,6 +208,19 @@ nav{
  min-width:44px;
  font-size:20px;
  color:var(--navy)
+}
+
+nav{flex-wrap:nowrap}
+
+.logo{
+ flex:0 1 auto;
+ min-width:0
+}
+
+.logo-text{
+ white-space:nowrap;
+ overflow:hidden;
+ text-overflow:ellipsis
 }
 
 @media (max-width:940px){
@@ -283,7 +268,7 @@ nav{
 }
 
 
-/* hero band */
+/* hero band (interior pages) */
 
 .pagehero{
  background:linear-gradient(160deg,var(--navy-d),var(--navy) 60%,var(--green));
@@ -314,9 +299,7 @@ nav{
  text-decoration:none
 }
 
-.crumb a:hover{
- color:#fff
-}
+.crumb a:hover{color:#fff}
 
 
 /* cards / grids */
@@ -427,13 +410,11 @@ nav{
  font-weight:700
 }
 
-.checks b{
- color:var(--ink)
-}
+.checks b{color:var(--ink)}
 
 
 /* =========================================================
-   FLOW STEPS — UPDATED ALIGNMENT
+   FLOW STEPS / PROCESS
    ========================================================= */
 
 .flowwrap{
@@ -467,6 +448,15 @@ nav{
  align-items:center
 }
 
+/* IMPORTANT:
+   Force heading, number and card into the exact same
+   grid row for every process step. */
+.fs .ft,
+.fs .node,
+.fs .fd{
+ grid-row:1;
+}
+
 .node{
  grid-column:2;
  justify-self:center;
@@ -487,8 +477,6 @@ nav{
  background:var(--green)
 }
 
-/* Odd steps: text LEFT, card RIGHT */
-
 .fs:nth-child(odd) .ft{
  grid-column:1;
  padding-right:44px;
@@ -501,8 +489,6 @@ nav{
  padding-left:44px;
  align-self:center
 }
-
-/* Even steps: card LEFT, text RIGHT */
 
 .fs:nth-child(even) .fd{
  grid-column:1;
@@ -532,7 +518,8 @@ nav{
  background:var(--card);
  border:1px solid var(--line);
  border-radius:6px;
- padding:22px 24px
+ padding:22px 24px;
+ align-self:center
 }
 
 .fd ul{
@@ -553,7 +540,7 @@ nav{
 }
 
 
-/* Mobile flow */
+/* mobile flow */
 
 @media (max-width:760px){
 
@@ -564,6 +551,12 @@ nav{
  .fs{
   grid-template-columns:54px 1fr;
   gap:0 16px
+ }
+
+ .fs .ft,
+ .fs .node,
+ .fs .fd{
+  grid-row:auto
  }
 
  .node{
@@ -956,7 +949,7 @@ footer strong{
 }
 
 
-/* tablet */
+/* responsive */
 
 @media (max-width:940px){
 
@@ -973,9 +966,6 @@ footer strong{
   grid-template-columns:1fr
  }
 }
-
-
-/* mobile */
 
 @media (max-width:640px){
 
@@ -1028,9 +1018,6 @@ footer strong{
   padding:36px 0 40px
  }
 }
-
-
-/* very small screens */
 
 @media (max-width:420px){
 
